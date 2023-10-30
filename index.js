@@ -11,6 +11,7 @@ var con = mysql.createConnection({
   password: "password",
   database: "SAMPLE_DB"
 });
+
 let accounts, groups, user_groups, group_members;
 /*
     Querying the accounts and entitlements from the database and storing them in JSON format
