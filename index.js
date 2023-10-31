@@ -164,7 +164,7 @@ app.post('/accounts/create/:id', bodyParser.json(),(req, res)=>{
 /*
     This endpoint adds an entitlement in the target system when the account is granted an access
 */
-app.put('/accounts/:id/group',bodyParser.json(),(req, res)=>{  
+app.post('/accounts/:id/add',bodyParser.json(),(req, res)=>{  
    const postData = req.body;
    console.log(postData);
    res.send("Added entitlement to the user successfully");
@@ -183,7 +183,7 @@ app.put('/accounts/:id/group',bodyParser.json(),(req, res)=>{
 /*
     This endpoint removes an entitlement in the target system when the account is revoked an access
 */
-app.delete('/accounts/:id/group',bodyParser.json(),(req, res)=>{  
+app.post('/accounts/:id/remove',bodyParser.json(),(req, res)=>{  
     const postData = req.body;
     console.log(postData);
     res.send("Removed entitlement from the user successfully");
