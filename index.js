@@ -8,7 +8,7 @@ var mysql = require('mysql');
 var con = mysql.createConnection({
   host: "localhost", //host.docker.internal
   user: "root",
-  password: "password",
+  password: "password", //Change your password as set for your MySQL setup
   database: "SAMPLE_DB"
 });
 
