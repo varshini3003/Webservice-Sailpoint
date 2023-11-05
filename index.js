@@ -160,7 +160,6 @@ app.post('/accounts/create/:id', bodyParser.json(),(req, res)=>{
    });
 });
 
-
 /*
     This endpoint adds an entitlement in the target system when the account is granted an access
 */

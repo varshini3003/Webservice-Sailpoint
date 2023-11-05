@@ -21,12 +21,19 @@ INSERT INTO SAMPLE_DB.ACCOUNTS VALUES ("ICC212", "Shivam", "Dube", "shivam@web.c
 INSERT INTO SAMPLE_DB.ACCOUNTS VALUES ("ICC235", "Shubman", "Gill", "sara@web.com", "A");
 INSERT INTO SAMPLE_DB.ACCOUNTS VALUES ("ICC205", "Suryakumar", "Yadav", "skyadav@web.com", "A");
 INSERT INTO SAMPLE_DB.ACCOUNTS VALUES ("ICC234", "Yuzvendra", "Chahal", "yuzi@web.com", "A");
+INSERT INTO SAMPLE_DB.ACCOUNTS VALUES ("ICC193", "Virat", "Kohli", "kohli@web.com", "A");
+INSERT INTO SAMPLE_DB.ACCOUNTS VALUES ("ICC228", "Ishan", "Kishan", "ishanshub@web.com", "A");
+INSERT INTO SAMPLE_DB.ACCOUNTS VALUES ("ICC192", "Mohammed", "Shami", "shami@web.com", "A");
+INSERT INTO SAMPLE_DB.ACCOUNTS VALUES ("ICC190", "Mahendra Singh", "Dhoni", "mahi@web.com", "A");
 
 INSERT INTO SAMPLE_DB.MYGROUPS VALUES ("RBA1", "Player", "Player has permissions to bat, bowl or field");
 INSERT INTO SAMPLE_DB.MYGROUPS VALUES ("RBA2", "Captain", "The captain has additional entitlements to player, such as making strategic decisions on the field");
 INSERT INTO SAMPLE_DB.MYGROUPS VALUES ("RBA3", "Substitute", "Substitutes play only when existing players face injuries");
 INSERT INTO SAMPLE_DB.MYGROUPS VALUES ("RBA4", "Coach", "Coaches do not play the game but conduct training sessions, guide players, work with the captain to devise game strategies");
 INSERT INTO SAMPLE_DB.MYGROUPS VALUES ("RBA5", "Umpire", "Umpires do not play but judge the decisions of the match");
+INSERT INTO SAMPLE_DB.MYGROUPS VALUES ("RBA6", "Batsman", "Can only bat");
+INSERT INTO SAMPLE_DB.MYGROUPS VALUES ("RBA7", "Bowler", "Can only bowl");
+INSERT INTO SAMPLE_DB.MYGROUPS VALUES ("RBA8", "Wicket-Keeper", "Can only do wicket-keeping");
 
 INSERT INTO SAMPLE_DB.USER_GROUPS VALUES ("ICC234", "RBA1");
 INSERT INTO SAMPLE_DB.USER_GROUPS VALUES ("ICC227", "RBA3");
