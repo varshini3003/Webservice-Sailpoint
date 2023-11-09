@@ -9,7 +9,7 @@ const options = {
    definition: {
       openapi: "3.0.0",
       info: {
-         title: "Accounts and Entitlements API",
+         title: "Accounts and Entitlements APIs",
          version: "1.0.0",
          description: "A sample web service"
       },

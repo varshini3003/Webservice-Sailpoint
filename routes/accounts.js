@@ -106,15 +106,24 @@ router.get('/', (req, res) => {
   *   get:
   *     summary: Returns the list of groups associated with the given account
   *     tags: [Groups for the given account] 
+  *     parameters:
+  *       - in: path
+  *         name: id
+  *         schema:
+  *           type: string
+  *         required: true
+  *         description: The account id
   *     responses:
   *       200:  
-  *         description: The list of accounts or users
+  *         description: The list of groups associated with the given account
   *         content:
   *           application/json:
   *             schema:
   *               type: array
   *               items:
   *                 $ref: '#components/schemas/User-Groups'
+  *       404:
+  *         description: Account not found
   *     
   */
  router.get('/:id/groups', (req, res) => {
