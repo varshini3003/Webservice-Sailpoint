@@ -140,6 +140,25 @@ router.get('/', (req, res) => {
     console.log(user_groups);
     res.end(user_groups);
  });
+ /**
+  * @swagger
+  * /accounts/enable/{id}:
+  *   post:
+  *     summary: Enables an account
+  *     tags: [Enable an account]
+  *     parameters:
+  *       - in: path
+  *         name: id
+  *         schema:
+  *           type: string
+  *         required: true
+  *         description: The account id
+  *     requestBody:
+  *       required: false
+  *     responses:
+  *       200:
+  *         description: The account was enabled
+  */
  router.post('/enable/:id', bodyParser.json(),(req, res)=>{  
     console.log(req.params.id);
     res.end("User set active");
@@ -153,6 +172,25 @@ router.get('/', (req, res) => {
     console.log('User enabled successfully.');
     });
  });
+ /**
+  * @swagger
+  * /accounts/disable/{id}:
+  *   post:
+  *     summary: Disables an account
+  *     tags: [Disable an account]
+  *     parameters:
+  *       - in: path
+  *         name: id
+  *         schema:
+  *           type: string
+  *         required: true
+  *         description: The account id
+  *     requestBody:
+  *       required: false
+  *     responses:
+  *       200:
+  *         description: The account was disabled
+  */
  router.post('/disable/:id', bodyParser.json(),(req, res)=>{  
     console.log(req.params.id);
     res.end("User set inactive");
@@ -166,7 +204,35 @@ router.get('/', (req, res) => {
     console.log('User disabled successfully.');
     });
  });
- router.put('/:id', bodyParser.json(),(req, res)=>{  
+ /**
+  * @swagger
+  * /accounts:
+  *   post:
+  *     summary: Creates a new account
+  *     tags: [Accounts]
+  *     requestBody:
+  *       required: true
+  *       content: 
+  *         application/json: 
+  *           schema:
+  *             type: array
+  *             items: 
+  *               Employee_id
+  *               firstname
+  *               lastname
+  *               email
+  *               Group_id
+  *     responses:
+  *       200:
+  *         description: Created account successfully 
+  *         content:
+  *           application/json:
+  *             schema:
+  *               type: array
+  *               items:
+  *                 $ref: '#components/schemas/Account'      
+  */
+ router.post('/', bodyParser.json(),(req, res)=>{  
     const postData = req.body;
     console.log(postData);
     res.send("Created account successfully");
@@ -192,8 +258,8 @@ router.get('/', (req, res) => {
     });
  });
  
-
- router.post('/:id',bodyParser.json(),(req, res)=>{  
+ 
+ router.put('/:id',bodyParser.json(),(req, res)=>{  
     const postData = req.body;
     console.log(postData);
     res.send("Added entitlement to the user successfully");
