@@ -23,7 +23,23 @@ con.connect(function(err) {
     });
  });
 
-
+ /**
+  * @swagger
+  * /groups:
+  *   get:
+  *     summary: Returns the entitlements
+  *     tags: [Groups]
+  *     responses:
+  *       200:  
+  *         description: The list of groups
+  *         content:
+  *           application/json:
+  *             schema:
+  *               type: array
+  *               items:
+  *                 $ref: '#components/schemas/Group'
+  *       
+  */
 router.get('/', (req, res) => { 
     res.setHeader('Content-Type', 'application/json');
     console.log(groups);
