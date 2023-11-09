@@ -29,12 +29,6 @@ con.connect(function(err) {
  *   schemas:
  *     Account:
  *       type: object
- *       required:
- *         - Employee_id
- *         - firstname
- *         - lastname
- *         - email
- *         - Group_id
  *       properties:
  *         Employee_id:
  *           type: string
@@ -50,23 +44,79 @@ con.connect(function(err) {
  *           description: Email
  *         Account_status:
  *           type: string
- *           description: Account status
- *         Group_id:
- *           type: group 
- *           description: Groups associated with the account
+ *           description: Account status in this source
  *       example:
  *         Employee_id: ICC190
  *         firstname: Varshini
  *         lastname: S
  *         email: vars@cdw.com
  *         Account_status: A
- *         Group_id: RBA1
+ *     Group:
+ *       type: object
+ *       properties:
+ *         Group_id:
+ *           type: string
+ *           description: Group id
+ *         Group_name:
+ *           type: string
+ *           description: Group name
+ *         Group_description:
+ *           type: string
+ *           description: Group description
+ *       example:
+ *         Group_id: RBA7
+ *         Group_name: Bowler
+ *         Group_description: Can only bowl
+ *     User-Groups:
+ *       type: object
+ *       properties:
+ *         Group_id:
+ *           type: group
+ *           description: Groups associated with the account, Can be multi-valued
+ *       example:
+ *         Group_id: RBA3
  */
+
+ /**
+  * @swagger
+  * /accounts:
+  *   get:
+  *     summary: Returns the list of accounts with 5 details - Employee_id, firstname, lastname, email, Account_status
+  *     tags: [Accounts]
+  *     responses:
+  *       200:  
+  *         description: The list of accounts or users
+  *         content:
+  *           application/json:
+  *             schema:
+  *               type: array
+  *               items:
+  *                 $ref: '#components/schemas/Account'
+  *       
+  */
 router.get('/', (req, res) => { 
     res.setHeader('Content-Type', 'application/json');
     console.log(accounts);
     res.send(accounts);  
  });
+
+ /**
+  * @swagger
+  * /accounts/{id}/groups:
+  *   get:
+  *     summary: Returns the list of groups associated with the given account
+  *     tags: [Groups for the given account] 
+  *     responses:
+  *       200:  
+  *         description: The list of accounts or users
+  *         content:
+  *           application/json:
+  *             schema:
+  *               type: array
+  *               items:
+  *                 $ref: '#components/schemas/User-Groups'
+  *     
+  */
  router.get('/:id/groups', (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     const account_id = req.params.id;
@@ -133,9 +183,7 @@ router.get('/', (req, res) => {
     });
  });
  
- /*
-     This endpoint adds an entitlement in the target system when the account is granted an access
- */
+
  router.post('/:id',bodyParser.json(),(req, res)=>{  
     const postData = req.body;
     console.log(postData);
@@ -152,9 +200,7 @@ router.get('/', (req, res) => {
        });
  });
  
- /*
-     This endpoint removes an entitlement in the target system when the account is revoked an access
- */
+
  router.delete('/:id',bodyParser.json(),(req, res)=>{  
      const postData = req.body;
      console.log(postData);

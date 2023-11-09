@@ -23,27 +23,7 @@ con.connect(function(err) {
     });
  });
 
- /**
- * @swagger
- * components:
- *   schemas:
- *     Group:
- *       type: object
- *       properties:
- *         Group_id:
- *           type: string
- *           description: Group id
- *         Group_name:
- *           type: string
- *           description: First name
- *         Group_description:
- *           type: string
- *           description: Last name
- *       example:
- *         Group_id: RBA7
- *         Group_name: Bowler
- *         Group_description: Can only bowl
- */
+
 router.get('/', (req, res) => { 
     res.setHeader('Content-Type', 'application/json');
     console.log(groups);
