@@ -75,6 +75,42 @@ con.connect(function(err) {
  *           description: Groups associated with the account, Can be multi-valued
  *       example:
  *         Group_id: RBA3
+ *     Create Account-Required Attributes:
+ *       type: object
+ *       properties:
+ *         Employee_id:
+ *           type: string
+ *           description: Employee id
+ *         firstname:
+ *           type: string
+ *           description: First name
+ *         lastname:
+ *           type: string
+ *           description: Last name
+ *         email:
+ *           type: string
+ *           description: Email
+ *         Group_id:
+ *           type: string
+ *           description: Group granted
+ *       example:
+ *         Employee_id: ICC190
+ *         firstname: Varshini
+ *         lastname: S
+ *         email: vars@cdw.com
+ *         Group_id: RBA1  
+ *     Update Account-Required Attributes:
+ *       type: object
+ *       properties:
+ *         Employee_id:
+ *           type: string
+ *           description: Employee id
+ *         Group_id:
+ *           type: string
+ *           description: Group granted or revoked
+ *       example:
+ *         Employee_id: ICC190
+ *         Group_id: RBA1  
  */
 
  /**
@@ -208,7 +244,7 @@ router.get('/', (req, res) => {
   * @swagger
   * /accounts:
   *   post:
-  *     summary: Creates a new account
+  *     summary: Creates a new account when an entitlement is granted to the user not existing in this source
   *     tags: [Accounts]
   *     requestBody:
   *       required: true
@@ -217,11 +253,7 @@ router.get('/', (req, res) => {
   *           schema:
   *             type: array
   *             items: 
-  *               Employee_id
-  *               firstname
-  *               lastname
-  *               email
-  *               Group_id
+  *               $ref: '#components/schemas/Create Account-Required Attributes'
   *     responses:
   *       200:
   *         description: Created account successfully 
@@ -230,13 +262,13 @@ router.get('/', (req, res) => {
   *             schema:
   *               type: array
   *               items:
-  *                 $ref: '#components/schemas/Account'      
+  *                 $ref: '#components/schemas/Create Account-Required Attributes'      
   */
  router.post('/', bodyParser.json(),(req, res)=>{  
     const postData = req.body;
     console.log(postData);
     res.send("Created account successfully");
-    const account_id = req.params.id;
+    const account_id = postData.Employee_id;
     const group_id = postData.Group_id;
     const firstName = postData.firstName;
     const lastName = postData.lastname;
@@ -258,13 +290,36 @@ router.get('/', (req, res) => {
     });
  });
  
- 
- router.put('/:id',bodyParser.json(),(req, res)=>{  
+  /**
+  * @swagger
+  * /accounts:
+  *   put:
+  *     summary: Updates an account when an entitlement is granted 
+  *     tags: [Accounts]
+  *     requestBody:
+  *       required: true
+  *       content: 
+  *         application/json: 
+  *           schema:
+  *             type: array
+  *             items: 
+  *               $ref: '#components/schemas/Update Account-Required Attributes'
+  *     responses:
+  *       200:
+  *         description: Updated account successfully 
+  *         content:
+  *           application/json:
+  *             schema:
+  *               type: array
+  *               items:
+  *                 $ref: '#components/schemas/Update Account-Required Attributes'      
+  */
+ router.put('/',bodyParser.json(),(req, res)=>{  
     const postData = req.body;
     console.log(postData);
     res.send("Added entitlement to the user successfully");
        var sql = "INSERT INTO SAMPLE_DB.USER_GROUPS VALUES (?, ?)";
-       const account_id = req.params.id;
+       const account_id = postData.Employee_id;
        const group_id = postData.Group_id;
        console.log(group_id);
        con.query(sql, [account_id,group_id],(err, result)=>{
@@ -274,23 +329,45 @@ router.get('/', (req, res) => {
           }
        });
  });
- 
+  /**
+  * @swagger
+  * /accounts:
+  *   delete:
+  *     summary: Updates an account when an entitlement is revoked
+  *     tags: [Accounts]
+  *     requestBody:
+  *       required: true
+  *       content: 
+  *         application/json: 
+  *           schema:
+  *             type: array
+  *             items: 
+  *               $ref: '#components/schemas/Update Account-Required Attributes'
+  *     responses:
+  *       200:
+  *         description: Updated account successfully 
+  *         content:
+  *           application/json:
+  *             schema:
+  *               type: array
+  *               items:
+  *                 $ref: '#components/schemas/Update Account-Required Attributes'      
+  */
 
- router.delete('/:id',bodyParser.json(),(req, res)=>{  
+ router.delete('/',bodyParser.json(),(req, res)=>{  
      const postData = req.body;
      console.log(postData);
      res.send("Removed entitlement from the user successfully");
         var sql = "DELETE FROM SAMPLE_DB.USER_GROUPS WHERE Employee_id =? AND Group_id=?";
-        const account_id = req.params.id;
+        const account_id = postData.Employee_id;
         const group_id = postData.Group_id;
         console.log(group_id);
-        con.query(sql, [account_id], group_id,(err, result)=>{
+        con.query(sql, [account_id, group_id],(err, result)=>{
            if (err) {
               console.error('Error updating user:', err);
               return;
            }
         });
   });
-
   module.exports = router;
   
