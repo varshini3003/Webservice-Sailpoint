@@ -65,7 +65,7 @@ con.connect(function(err) {
  *       properties:
  *         groupId:
  *           type: string
- *           description: Groups (Group ids) associated with the employee account, Can be multi-valued
+ *           description: Groups (Group ids) associated with the employee account (which is in the params), Can be multi-valued
  *       example:
  *         groupId: RBA3
  *     Create Account - Required Attributes in Body:
