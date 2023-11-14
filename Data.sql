@@ -1,6 +1,6 @@
 -- Upload this SQL file into your MySQL system
 
-CREATE DATABASE CDW_BANK;
+CREATE DATABASE IF NOT EXISTS CDW_BANK;
 USE CDW_BANK;
 
 -- Tables 
@@ -9,7 +9,7 @@ CREATE TABLE CDW_BANK.EMPLOYEES (employeeId VARCHAR(10), firstName VARCHAR(50), 
 CREATE TABLE CDW_BANK.ENTITLEMENTS (groupId VARCHAR(10), groupName VARCHAR(50), groupDescription VARCHAR(400));
 CREATE TABLE CDW_BANK.USER_GROUPS (employeeId VARCHAR(10), groupId VARCHAR(10));
 
--- Account and entitlement information
+-- Employee Account and entitlement information
 
 INSERT INTO CDW_BANK.EMPLOYEES VALUES ("BNK21010", "Ajinkya", "Rahane", "rahane@cdw.com", "A");
 INSERT INTO CDW_BANK.EMPLOYEES VALUES ("BNK19007", "Devdutt", "Padikal", "padikal@cdw.com", "A");

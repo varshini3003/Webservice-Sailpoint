@@ -11,7 +11,7 @@ const options = {
       info: {
          title: "Accounts and Entitlements APIs",
          version: "1.0.0",
-         description: "A sample web service"
+         description: "A sample web service that has endpoints providing you the necessary account and entiltment information of the employees in CDW Bank."
       },
       servers: [
          {
@@ -31,5 +31,5 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 app.use("/accounts", accountsRouter);
 app.use("/groups", groupsRouter);
 app.listen(port, ()=>{
-   console.log(`server is listening on ${port} port`);
+   console.log(`Server is listening on ${port} port`);
 });

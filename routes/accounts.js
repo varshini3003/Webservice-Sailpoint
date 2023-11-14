@@ -1,20 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const router = express.Router();
-var mysql = require('mysql');
-var con = mysql.createConnection({
-    host: "localhost", 
-    user: "root",
-    password: "password", //Change your password as set for your MySQL setup
-    database: "SAMPLE_DB"
-  });
-let accounts, user_groups;
+let accounts, userGroups;
 con.connect(function(err) {
     if (err) {
        console.error(err.stack);
        return;
     }
-    con.query("SELECT * FROM SAMPLE_DB.ACCOUNTS", function (err, result, fields) {
+    con.query("SELECT * FROM CDW_BANK.EMPLOYEES", function (err, result, fields) {
        if (err) {
           console.error(err.stack);
           return;
@@ -30,71 +23,71 @@ con.connect(function(err) {
  *     Account:
  *       type: object
  *       properties:
- *         Employee_id:
+ *         employeeId:
  *           type: string
  *           description: Employee id
- *         firstname:
+ *         firstName:
  *           type: string
  *           description: First name
- *         lastname:
+ *         lastName:
  *           type: string
  *           description: Last name
  *         email:
  *           type: string
  *           description: Email
- *         Account_status:
+ *         accountStatus:
  *           type: string
- *           description: Account status in this source
+ *           description: Account status of the employee in this source
  *       example:
- *         Employee_id: ICC190
- *         firstname: Varshini
- *         lastname: S
+ *         employeeId: BNK23190
+ *         firstName: Varshini
+ *         lastName: S
  *         email: vars@cdw.com
- *         Account_status: A
+ *         accountStatus: A
  *     Group:
  *       type: object
  *       properties:
- *         Group_id:
+ *         groupId:
  *           type: string
  *           description: Group id
- *         Group_name:
+ *         groupName:
  *           type: string
  *           description: Group name
- *         Group_description:
+ *         groupDescription:
  *           type: string
  *           description: Group description
  *       example:
- *         Group_id: RBA7
- *         Group_name: Bowler
- *         Group_description: Can only bowl
+ *         groupId: RBA7
+ *         groupName: Bowler
+ *         groupDescription: Can only bowl
  *     User-Groups:
  *       type: object
  *       properties:
- *         Group_id:
- *           type: group
- *           description: Groups associated with the account, Can be multi-valued
+ *         groupId:
+ *           type: string
+ *           description: Groups (Group ids) associated with the employee account, Can be multi-valued
  *       example:
- *         Group_id: RBA3
- *     Create Account-Required Attributes:
+ *         groupId: RBA3
+ *     Create Account - Required Attributes in Body:
  *       type: object
  *       properties:
- *         firstname:
+ *         firstName:
  *           type: string
  *           description: First name
- *         lastname:
+ *         lastName:
  *           type: string
  *           description: Last name
  *         email:
  *           type: string
  *           description: Email
- *         Group_id:
+ *         groupId:
  *           type: string
- *           description: Group granted
+ *           description: Group which is granted to the user
  *       example:
- *         firstname: Varshini
- *         lastname: S
+ *         firstName: Varshini
+ *         lastName: S
  *         email: vars@cdw.com
- *         Group_id: RBA1  
+ *         groupId: RBA1  
  *     
  */
  /**
@@ -111,11 +104,11 @@ con.connect(function(err) {
   * @swagger
   * /accounts:
   *   get:
-  *     summary: Returns the list of accounts with 5 details - Employee_id, firstname, lastname, email, Account_status
+  *     summary: Returns the list of employee accounts with 5 details - employeeId, firstName, lastName, email, accountStatus
   *     tags: [Accounts]
   *     responses:
   *       200:  
-  *         description: The list of accounts or users
+  *         description: The list of employee accounts 
   *         content:
   *           application/json:
   *             schema:
@@ -134,18 +127,18 @@ router.get('/', (req, res) => {
   * @swagger
   * /accounts/{id}/groups:
   *   get:
-  *     summary: Returns the list of groups associated with the given account
-  *     tags: [Groups for the given account] 
+  *     summary: Returns the list of groups associated with the given employee account
+  *     tags: [Groups for the given employee account] 
   *     parameters:
   *       - in: path
   *         name: id
   *         schema:
   *           type: string
   *         required: true
-  *         description: The account id
+  *         description: The Employee id 
   *     responses:
   *       200:  
-  *         description: The list of groups associated with the given account
+  *         description: The list of groups associated with the given employee account
   *         content:
   *           application/json:
   *             schema:
@@ -153,28 +146,28 @@ router.get('/', (req, res) => {
   *               items:
   *                 $ref: '#components/schemas/User-Groups'
   *       404:
-  *         description: Account not found
+  *         description: Employee account not found
   *     
   */
  router.get('/:id/groups', (req, res) => {
     res.setHeader('Content-Type', 'application/json');
-    const account_id = req.params.id;
-    console.log(account_id);
-    con.query("SELECT Group_id FROM SAMPLE_DB.USER_GROUPS WHERE Employee_id = ?", [account_id], function (err, result, fields) {
+    const employeeId = req.params.id;
+    console.log(employeeId);
+    con.query("SELECT groupId FROM CDW_BANK.USER_GROUPS WHERE employeeId = ?", [employeeId], function (err, result, fields) {
        if (err) {
           console.error(err.stack);
           return;
        }
-       user_groups=JSON.stringify(result);      
+       userGroups=JSON.stringify(result);      
     });
-    console.log(user_groups);
-    res.end(user_groups);
+    console.log(userGroups);
+    res.end(userGroups);
  });
  /**
   * @swagger
   * /accounts/enable/{id}:
   *   post:
-  *     summary: Enables an account
+  *     summary: Enables an account in the target system
   *     tags: [Enable an account]
   *     parameters:
   *       - in: path
@@ -182,7 +175,7 @@ router.get('/', (req, res) => {
   *         schema:
   *           type: string
   *         required: true
-  *         description: The account id
+  *         description: The Employee id 
   *     requestBody:
   *       required: false
   *     responses:
@@ -191,10 +184,10 @@ router.get('/', (req, res) => {
   */
  router.post('/enable/:id', bodyParser.json(),(req, res)=>{  
     console.log(req.params.id);
-    res.end("User set active");
-    const updateQuery = "UPDATE SAMPLE_DB.ACCOUNTS SET Account_status = 'A' WHERE Employee_id = ?";
-    const userId = req.params.id; 
-    con.query(updateQuery, [userId], (error, results) => {
+    res.end("User set active in the target system");
+    const updateQuery = "UPDATE CDW_BANK.EMPLOYEES SET accountStatus = 'A' WHERE employeeId = ?";
+    const employeeId = req.params.id; 
+    con.query(updateQuery, [employeeId], (error, results) => {
     if (error) {
        console.error('Error enabling user:', error);
        return;
@@ -206,7 +199,7 @@ router.get('/', (req, res) => {
   * @swagger
   * /accounts/disable/{id}:
   *   post:
-  *     summary: Disables an account
+  *     summary: Disables an account in the target system
   *     tags: [Disable an account]
   *     parameters:
   *       - in: path
@@ -214,7 +207,7 @@ router.get('/', (req, res) => {
   *         schema:
   *           type: string
   *         required: true
-  *         description: The account id
+  *         description: The Employee id
   *     requestBody:
   *       required: false
   *     responses:
@@ -224,9 +217,9 @@ router.get('/', (req, res) => {
  router.post('/disable/:id', bodyParser.json(),(req, res)=>{  
     console.log(req.params.id);
     res.end("User set inactive");
-    const updateQuery = "UPDATE SAMPLE_DB.ACCOUNTS SET Account_status = 'I' WHERE Employee_id = ?";
-    const userId = req.params.id; 
-    con.query(updateQuery, [userId], (error, results) => {
+    const updateQuery = "UPDATE CDW_BANK.EMPLOYEES SET accountStatus = 'I' WHERE employeeId = ?";
+    const employeeId = req.params.id; 
+    con.query(updateQuery, [employeeId], (error, results) => {
     if (error) {
        console.error('Error disabling user:', error);
        return;
@@ -246,15 +239,16 @@ router.get('/', (req, res) => {
   *         schema:
   *           type: string
   *         required: true
-  *         description: The account id
+  *         description: The Employee id
   *     requestBody:
   *       required: true
+  *       description: Other attributes required in request body to create employee account in the target 
   *       content: 
   *         application/json: 
   *           schema:
   *             type: array
   *             items: 
-  *               $ref: '#components/schemas/Create Account-Required Attributes'
+  *               $ref: '#components/schemas/Create Account - Required Attributes in Body'
   *     responses:
   *       200:
   *         description: Created account successfully       
@@ -263,21 +257,21 @@ router.get('/', (req, res) => {
     const postData = req.body;
     console.log(postData);
     res.send("Created account successfully");
-    const account_id = req.params.id;
-    const group_id = postData.Group_id;
+    const employeeId = req.params.id;
+    const groupId = postData.groupId;
     const firstName = postData.firstName;
-    const lastName = postData.lastname;
+    const lastName = postData.lastName;
     const email = postData.email;
-    const Account_status = 'A';
-    var insertQuery = "INSERT INTO SAMPLE_DB.ACCOUNTS VALUES (?, ?, ?, ?, ?)";
-    con.query(insertQuery, [account_id,firstName,lastName,email,Account_status],function (err, result) {
+    const accountStatus = 'A';
+    var insertQuery = "INSERT INTO CDW_BANK.EMPLOYEES VALUES (?, ?, ?, ?, ?)";
+    con.query(insertQuery, [employeeId,firstName,lastName,email,accountStatus],function (err, result) {
        if (err) {
           console.error('Error creating user:', err);
           return;
        }
     });
-    var sql = "INSERT INTO SAMPLE_DB.USER_GROUPS VALUES (?, ?)";
-    con.query(sql, [account_id,group_id],function (err, result) {
+    var sql = "INSERT INTO CDW_BANK.USER_GROUPS VALUES (?, ?)";
+    con.query(sql, [employeeId,groupId],function (err, result) {
        if (err) {
           console.error('Error creating user:', err);
           return;
@@ -297,8 +291,9 @@ router.get('/', (req, res) => {
   *         schema:
   *           type: string
   *         required: true
-  *         description: The account id
+  *         description: The Employee id
   *     requestBody:
+  *       description: Group Id is required in the request body to update the account details in the target
   *       required: true
   *       content: 
   *         application/json: 
@@ -320,11 +315,11 @@ router.get('/', (req, res) => {
     const postData = req.body;
     console.log(postData);
     res.send("Added entitlement to the user successfully");
-       var sql = "INSERT INTO SAMPLE_DB.USER_GROUPS VALUES (?, ?)";
-       const account_id = req.params.id;
-       const group_id = postData.Group_id;
-       console.log(group_id);
-       con.query(sql, [account_id,group_id],(err, result)=>{
+       var sql = "INSERT INTO CDW_BANK.USER_GROUPS VALUES (?, ?)";
+       const employeeId = req.params.id;
+       const groupId = postData.groupId;
+       console.log(groupId);
+       con.query(sql, [employeeId,groupId],(err, result)=>{
           if (err) {
              console.error('Error updating user:', err);
              return;
@@ -343,8 +338,9 @@ router.get('/', (req, res) => {
   *         schema:
   *           type: string
   *         required: true
-  *         description: The account id
+  *         description: The Employee id
   *     requestBody:
+  *       description: Group Id is required in the request body to update the account details in the target
   *       required: true
   *       content: 
   *         application/json: 
@@ -367,11 +363,11 @@ router.get('/', (req, res) => {
      const postData = req.body;
      console.log(postData);
      res.send("Removed entitlement from the user successfully");
-        var sql = "DELETE FROM SAMPLE_DB.USER_GROUPS WHERE Employee_id =? AND Group_id=?";
-        const account_id = req.params.id;
-        const group_id = postData.Group_id;
-        console.log(group_id);
-        con.query(sql, [account_id, group_id],(err, result)=>{
+        var sql = "DELETE FROM CDW_BANK.USER_GROUPS WHERE employeeId =? AND groupId=?";
+        const employeeId = req.params.id;
+        const groupId = postData.groupId;
+        console.log(groupId);
+        con.query(sql, [employeeId, groupId],(err, result)=>{
            if (err) {
               console.error('Error updating user:', err);
               return;
