@@ -97,7 +97,16 @@ con.connect(function(err) {
  *         Group_id: RBA1  
  *     
  */
-
+ /**
+  * @swagger
+  * /:
+  *   get:
+  *     summary: Returns a message
+  *     tags: [Testing connection - Base URL]
+  *     responses:
+  *       200:  
+  *         description: A Hello World message
+  */
  /**
   * @swagger
   * /accounts:

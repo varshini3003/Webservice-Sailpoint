@@ -23,20 +23,11 @@ const options = {
 };
 const specs = swaggerJSDoc(options);
 const app = express();
- /**
-  * @swagger
-  * /:
-  *   get:
-  *     summary: Returns a message
-  *     tags: [Testing connection - Base URL]
-  *     responses:
-  *       200:  
-  *         description: A message
-  */
 app.get('/', (req, res) => {
    res.send("Hello World")
 })
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
+
 app.use("/accounts", accountsRouter);
 app.use("/groups", groupsRouter);
 app.listen(port, ()=>{
