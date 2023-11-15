@@ -12,8 +12,12 @@ const db = mysql.createConnection({
   password: 'password', // Change your password set according to your MySQL
   database: 'CDW_BANK',
 });
-
-
+db.connect(function(err) {
+   if (err) {
+      console.error(err.stack);
+      return;
+   }
+}); 
  /**
   * @swagger
   * /groups:
@@ -48,21 +52,15 @@ router.get('/', (req, res) => {
    console.log(limit+" "+offset);
    let groups;
     res.setHeader('Content-Type', 'application/json');
-    db.connect(function(err) {
+    db.query("SELECT * FROM CDW_BANK.ENTITLEMENTS LIMIT ? OFFSET ?; ",[limit, offset], function (err, result, fields) {
       if (err) {
          console.error(err.stack);
          return;
-      }
-      db.query("SELECT * FROM CDW_BANK.ENTITLEMENTS LIMIT ? OFFSET ?; ",[limit, offset], function (err, result, fields) {
-         if (err) {
-            console.error(err.stack);
-            return;
-         } 
-         groups=JSON.stringify(result);  
-         console.log(groups);  
-         res.send(groups);  
-      });
-   }); 
+      } 
+      groups=JSON.stringify(result);  
+      console.log(groups);  
+      res.send(groups);  
+   });
  });
 module.exports = router;
   
