@@ -42,7 +42,7 @@ const db = mysql.createConnection({
   */
 router.get('/', (req, res) => { 
    const requestBody = req.body;
-   console.log(requestBody);
+   console.log(req);
    const limit = requestBody.limit;
    const offset = requestBody.offset;
    console.log(limit+" "+offset);
