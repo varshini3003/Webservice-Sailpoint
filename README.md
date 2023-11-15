@@ -2,7 +2,7 @@
 
 Topics covered: 
 
-Basic HTTP operations in web service connector 
-Multiple endpoints, Pagination on aggregation 
-Usage of static values and generator in Create account profile settings 
+Basic HTTP operations in web service connector, 
+Multiple endpoints, Pagination on aggregation, 
+Usage of static values and generator in Create account profile settings,
 Automated provisioning 
