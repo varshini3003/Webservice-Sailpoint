@@ -34,10 +34,9 @@ db.connect(async (err) => {
         await executeQuery(db, query);
       }
       console.log(
-        "CDW_BANK Database created and migration completed successfully. Check your MySQL and refer the tables and records in the database."
+        "CDW_BANK Database created and migration completed successfully. Check your MySQL and refer the tables and records in the database. Now run the node server to view the endpoints."
       );
     } else {
-      console.log("Database already exists. No migration required.");
       const app = express();
       const accountsRouter = require("./routes/accounts");
       app.use("/accounts", accountsRouter);
