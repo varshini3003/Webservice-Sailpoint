@@ -27,7 +27,7 @@ db.connect(async (err) => {
     const result = await executeQuery(db, checkDBQuery);
 
     if (result.length === 0) {
-      const migrationFilePath = "Data.sql"; // Replace with your SQL file path
+      const migrationFilePath = "Data.sql"; 
       const sql = fs.readFileSync(migrationFilePath, "utf-8");
       const queries = sql.split(";").filter((query) => query.trim());
       for (const query of queries) {

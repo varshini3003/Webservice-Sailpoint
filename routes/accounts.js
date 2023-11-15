@@ -6,7 +6,7 @@ const mysql = require('mysql');
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'password',
+  password: 'password', // Change your password set according to your MySQL
   database: 'CDW_BANK',
 });
 db.connect(function(err) {
