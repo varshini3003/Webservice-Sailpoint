@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const router = express.Router();
+
 let accounts, userGroups;
 const mysql = require('mysql');
 const db = mysql.createConnection({
@@ -126,6 +127,8 @@ db.connect(function(err) {
   */
 router.get('/', (req, res) => { 
     res.setHeader('Content-Type', 'application/json');
+    const reqBody = req.body;
+    console.log(reqBody);
     console.log(accounts);
     res.send(accounts);  
  });
