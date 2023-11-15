@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 
 router.use(express.json());
 router.use(express.urlencoded({extended: false}));
-let groups;
+
 const mysql = require('mysql');
 const db = mysql.createConnection({
   host: 'localhost',
@@ -20,6 +20,15 @@ const db = mysql.createConnection({
   *   get:
   *     summary: Returns the entitlements
   *     tags: [Groups]
+  *     requestBody:
+  *       required: true
+  *       description: Other attributes required in request body for pagination
+  *       content: 
+  *         application/json: 
+  *           schema:
+  *             type: array
+  *             items: 
+  *               $ref: '#components/schemas/Group - Required Attributes in Body for pagination'
   *     responses:
   *       200:  
   *         description: The list of groups
@@ -36,6 +45,8 @@ router.get('/', (req, res) => {
    console.log(requestBody);
    const limit = requestBody.limit;
    const offset = requestBody.offset;
+   console.log(limit+" "+offset);
+   let groups;
     res.setHeader('Content-Type', 'application/json');
     db.connect(function(err) {
       if (err) {
@@ -46,12 +57,12 @@ router.get('/', (req, res) => {
          if (err) {
             console.error(err.stack);
             return;
-         }
-         groups=JSON.stringify(result);      
+         } 
+         groups=JSON.stringify(result);  
+         console.log(groups);  
+         res.send(groups);  
       });
-   });
-    console.log(groups);
-    res.send(groups);  
+   }); 
  });
 module.exports = router;
   

@@ -1,7 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const router = express.Router();
-
+router.use(express.json());
+router.use(express.urlencoded({extended: false}));
 let accounts, userGroups;
 const mysql = require('mysql');
 const db = mysql.createConnection({
@@ -76,6 +77,18 @@ db.connect(function(err) {
  *           description: Groups (Group ids) associated with the employee account (which is in the params), Can be multi-valued
  *       example:
  *         groupId: RBA3
+ *     Group - Required Attributes in Body for pagination:
+ *       type: object
+ *       properties:
+ *         limit:
+ *           type: Integer
+ *           description: Limit 
+ *         offset:
+ *           type: Integer
+ *           description: Offset 
+ *       example:
+ *         limit: 10
+ *         offset: 1
  *     Create Account - Required Attributes in Body:
  *       type: object
  *       properties:
