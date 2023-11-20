@@ -46,7 +46,7 @@ db.connect(function(err) {
   */
 router.get('/', (req, res) => { 
    const requestBody = req.body;
-   console.log(req);
+   console.log(req.get('accept')+" "+req.get('accept-encoding'));
    const limit = requestBody.limit;
    const offset = requestBody.offset;
    console.log(limit+" "+offset);
