@@ -4,19 +4,18 @@ const router = express.Router();
 router.use(express.json());
 router.use(express.urlencoded({extended: false}));
 let accounts, userGroups;
+
+var db = require('./database');
+db.database = 'CDW_BANK';
 const mysql = require('mysql');
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'password', // Change your password set according to your MySQL
-  database: 'CDW_BANK',
-});
-db.connect(function(err) {
+const dbConnection = mysql.createConnection(db);
+
+dbConnection.connect(function(err) {
     if (err) {
        console.error(err.stack);
        return;
     }
-    db.query("SELECT * FROM CDW_BANK.EMPLOYEES", function (err, result, fields) {
+    dbConnection.query("SELECT * FROM CDW_BANK.EMPLOYEES", function (err, result, fields) {
        if (err) {
           console.error(err.stack);
           return;
@@ -176,7 +175,7 @@ router.get('/', (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     const employeeId = req.params.id;
     console.log(employeeId);
-    db.query("SELECT groupId FROM CDW_BANK.USER_GROUPS WHERE employeeId = ?", [employeeId], function (err, result, fields) {
+    dbConnection.query("SELECT groupId FROM CDW_BANK.USER_GROUPS WHERE employeeId = ?", [employeeId], function (err, result, fields) {
        if (err) {
           console.error(err.stack);
           return;
@@ -210,7 +209,7 @@ router.get('/', (req, res) => {
     res.end("User set active in the target system");
     const updateQuery = "UPDATE CDW_BANK.EMPLOYEES SET accountStatus = 'A' WHERE employeeId = ?";
     const employeeId = req.params.id; 
-    db.query(updateQuery, [employeeId], (error, results) => {
+    dbConnection.query(updateQuery, [employeeId], (error, results) => {
     if (error) {
        console.error('Error enabling user:', error);
        return;
@@ -242,7 +241,7 @@ router.get('/', (req, res) => {
     res.end("User set inactive");
     const updateQuery = "UPDATE CDW_BANK.EMPLOYEES SET accountStatus = 'I' WHERE employeeId = ?";
     const employeeId = req.params.id; 
-    db.query(updateQuery, [employeeId], (error, results) => {
+    dbConnection.query(updateQuery, [employeeId], (error, results) => {
     if (error) {
        console.error('Error disabling user:', error);
        return;
@@ -287,14 +286,14 @@ router.get('/', (req, res) => {
     const email = postData.email;
     const accountStatus = 'A';
     var insertQuery = "INSERT INTO CDW_BANK.EMPLOYEES VALUES (?, ?, ?, ?, ?)";
-    db.query(insertQuery, [employeeId,firstName,lastName,email,accountStatus],function (err, result) {
+    dbConnection.query(insertQuery, [employeeId,firstName,lastName,email,accountStatus],function (err, result) {
        if (err) {
           console.error('Error creating user:', err);
           return;
        }
     });
     var sql = "INSERT INTO CDW_BANK.USER_GROUPS VALUES (?, ?)";
-    db.query(sql, [employeeId,groupId],function (err, result) {
+    dbConnection.query(sql, [employeeId,groupId],function (err, result) {
        if (err) {
           console.error('Error creating user:', err);
           return;
@@ -342,7 +341,7 @@ router.get('/', (req, res) => {
        const employeeId = req.params.id;
        const groupId = postData.groupId;
        console.log(groupId);
-       db.query(sql, [employeeId,groupId],(err, result)=>{
+       dbConnection.query(sql, [employeeId,groupId],(err, result)=>{
           if (err) {
              console.error('Error updating user:', err);
              return;
@@ -390,7 +389,7 @@ router.get('/', (req, res) => {
         const employeeId = req.params.id;
         const groupId = postData.groupId;
         console.log(groupId);
-        db.query(sql, [employeeId, groupId],(err, result)=>{
+        dbConnection.query(sql, [employeeId, groupId],(err, result)=>{
            if (err) {
               console.error('Error updating user:', err);
               return;

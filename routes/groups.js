@@ -5,14 +5,12 @@ const bodyParser = require('body-parser');
 router.use(express.json());
 router.use(express.urlencoded({extended: false}));
 
+var db = require('./database');
+db.database = 'CDW_BANK';
 const mysql = require('mysql');
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'password', // Change your password set according to your MySQL
-  database: 'CDW_BANK',
-});
-db.connect(function(err) {
+const dbConnection = mysql.createConnection(db);
+
+dbConnection.connect(function(err) {
    if (err) {
       console.error(err.stack);
       return;
@@ -52,7 +50,7 @@ router.get('/', (req, res) => {
    console.log(limit+" "+offset);
    let groups;
     res.setHeader('Content-Type', 'application/json');
-    db.query("SELECT * FROM CDW_BANK.ENTITLEMENTS LIMIT ? OFFSET ?; ",[limit, offset], function (err, result, fields) {
+    dbConnection.query("SELECT * FROM CDW_BANK.ENTITLEMENTS LIMIT ? OFFSET ?; ",[limit, offset], function (err, result, fields) {
       if (err) {
          console.error(err.stack);
          return;
