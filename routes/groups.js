@@ -42,12 +42,17 @@ dbConnection.connect(function(err) {
   *                 $ref: '#components/schemas/Group'
   *       
   */
-router.get('/', (req, res) => { 
+router.post('/', (req, res) => { 
+   console.log(Object.keys(req))
+   console.log(req.body)
+   console.log(req.params)
+   console.log(req.query)
    const requestBody = req.body;
-   console.log(req.get('accept')+" "+req.get('accept-encoding'));
+   
+   // console.log(req.get('accept')+" "+req.get('accept-encoding'));
    const limit = requestBody.limit;
    const offset = requestBody.offset;
-   console.log(limit+" "+offset);
+   // console.log(limit+" "+offset);
    let groups;
     res.setHeader('Content-Type', 'application/json');
     dbConnection.query("SELECT * FROM CDW_BANK.ENTITLEMENTS LIMIT ? OFFSET ?; ",[limit, offset], function (err, result, fields) {
