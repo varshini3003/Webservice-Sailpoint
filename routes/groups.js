@@ -19,7 +19,7 @@ dbConnection.connect(function(err) {
  /**
   * @swagger
   * /groups:
-  *   get:
+  *   post:
   *     summary: Returns the entitlements
   *     tags: [Groups]
   *     requestBody:
