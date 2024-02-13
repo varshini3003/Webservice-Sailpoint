@@ -303,8 +303,8 @@ router.get('/', (req, res) => {
  
   /**
   * @swagger
-  * /accounts/{id}:
-  *   put:
+  * /accounts/{id}/add:
+  *   post:
   *     summary: Updates an account when an entitlement is granted 
   *     tags: [Accounts]
   *     parameters:
@@ -333,7 +333,7 @@ router.get('/', (req, res) => {
   *               items:
   *                 $ref: '#components/schemas/User-Groups'      
   */
- router.put('/:id',bodyParser.json(),(req, res)=>{  
+ router.post('/:id/add',bodyParser.json(),(req, res)=>{  
     const postData = req.body;
     console.log(postData);
     res.send("Added entitlement to the user successfully");
@@ -350,8 +350,8 @@ router.get('/', (req, res) => {
  });
   /**
   * @swagger
-  * /accounts/{id}:
-  *   delete:
+  * /accounts/{id}/remove:
+  *   post:
   *     summary: Updates an account when an entitlement is revoked
   *     tags: [Accounts]
   *     parameters:
@@ -381,7 +381,7 @@ router.get('/', (req, res) => {
   *                 $ref: '#components/schemas/User-Groups'      
   */
 
- router.delete('/:id',bodyParser.json(),(req, res)=>{  
+ router.post('/:id/remove',bodyParser.json(),(req, res)=>{  
      const postData = req.body;
      console.log(postData);
      res.send("Removed entitlement from the user successfully");
